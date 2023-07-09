@@ -70,13 +70,13 @@ def find_players():
                 line = line.split(': ')[-1]  # Players only in message
                 players = line.split(', ')  # Split at comma and remove whitespace before name
 
-                for player in players:
-                    # Split name at end of rank and get last element (works for every rank including non)
-                    player = player.split('] ')[-1]
+        for player in players:
+            # Split name at end of rank and get last element (works for every rank including non)
+            player = player.split('] ')[-1]
 
-                    if check_stats(player):
-                        print(f'{player} meets requirements. TRUE')
-                    else:
+            if check_stats(player):
+                print(f'{player} meets requirements. TRUE')
+            else:
                         print(f'{player} does not meet requirements. FALSE')
 
         print('\nFinished!')
