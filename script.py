@@ -91,7 +91,9 @@ def find_players():
                 player = player[1:]
 
             if check_stats(player):
-                print(player)
+                print(f'{player} meets requirements. TRUE')
+            else:
+                print(f'{player} does not meet requirements. FALSE')
 
         print('\nFinished!')
 
