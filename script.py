@@ -44,6 +44,9 @@ def check_stats(player):
         bedwars_star = data["player"]["achievements"]["bedwars_level"]
     except KeyError:
         bedwars_star = 0
+    
+    if bedwars_star < 50:
+        return False
 
     bw_final_kills = bedwars_data.get('final_kills_bedwars', 0)
     bw_final_deaths = bedwars_data.get('final_deaths_bedwars', 0)
