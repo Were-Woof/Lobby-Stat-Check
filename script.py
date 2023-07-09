@@ -1,9 +1,11 @@
 import requests
 
-API_KEY = '' #This allows you to access the hypixel api. To get a key, go to https://developer.hypixel.net/ and follow the instructions.
-user = '' #This is the name of the user that your client is under
-path = fr'c:\Users\{user}\.lunarclient\offline\multiver\logs\latest.log' #If this isn't where your chat logs file is (and if you are using a client other than Lunar), please replace this with the correct path
+#This allows you to access the hypixel api. To get a key, go to https://developer.hypixel.net/ and follow the instructions.
+API_KEY = ''
 
+#Here we attempt to work out where your chat logs file is. If this doesn't work, you will need to replace the path variable with the correct value. Make sure to keep the 'fr' before the string.
+user_profile = os.getenv('USERPROFILE')
+path = fr'{user_profile}\.lunarclient\offline\multiver\logs\latest.log' 
 
 def check_stats(player):
     r = requests.get(f'https://api.mojang.com/users/profiles/minecraft/{player}?').json()
