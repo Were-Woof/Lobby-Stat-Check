@@ -1,11 +1,13 @@
 import requests
+import os
+#print(os.getlogin())
+#print(os.getcwd())
 
-#This allows you to access the hypixel api. To get a key, go to https://developer.hypixel.net/ and follow the instructions.
-API_KEY = ''
-
-#Here we attempt to work out where your chat logs file is. If this doesn't work, you will need to replace the path variable with the correct value. Make sure to keep the 'fr' before the string.
+API_KEY = '77eb7f72-6e98-4c77-8744-fbe94d469975' #This allows you to access the hypixel api. To get a key, go to https://developer.hypixel.net/ and follow the instructions.
+#user = os.getlogin()
+#path = fr'c:\Users\{user}\.lunarclient\offline\multiver\logs\latest.log' #If this isn't where your chat logs file is (and if you are using a client other than Lunar), please replace this with the correct path
 user_profile = os.getenv('USERPROFILE')
-path = fr'{user_profile}\.lunarclient\offline\multiver\logs\latest.log' 
+path = fr'{user_profile}\.lunarclient\offline\multiver\logs\latest.log'
 
 def check_stats(player):
     r = requests.get(f'https://api.mojang.com/users/profiles/minecraft/{player}?').json()
@@ -20,13 +22,7 @@ def check_stats(player):
     data = requests.get(f"https://api.hypixel.net/player?key={API_KEY}&uuid={uuid}").json()
     try:
         player_data = data["player"]["stats"]
-    except:
-        return False
-    try:
         bedwars_data = player_data["Bedwars"]
-    except:
-        return False
-    try:
         duels_data = player_data["Duels"]
     except:
         return False
@@ -35,16 +31,13 @@ def check_stats(player):
         bedwars_star = data["player"]["achievements"]["bedwars_level"]
     except:
         bedwars_star = 0
+
+    bw_final_deaths = bedwars_data.get("final_deaths_bedwars", 0)
+    bw_final_deaths = 1
+    bw_final_kills = bedwars_data.get("final_kills_bedwars", 0)
+
     try:
-        bw_final_deaths = bedwars_data["final_deaths_bedwars"]
-    except:
-        bw_final_deaths = 1
-    try:
-        bw_final_kills = bedwars_data["final_kills_bedwars"]
-    except:
-        bw_final_kills = 1
-    try:
-        bw_fkdr = bw_final_kills/bw_final_deaths
+        bw_fkdr = bw_final_kills / (bw_final_deaths or 1)
     except:
         bw_fkdr = 1
 
