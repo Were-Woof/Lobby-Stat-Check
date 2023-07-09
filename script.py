@@ -4,7 +4,7 @@ import os
 #print(os.getcwd())
 
 API_KEY = '' #This allows you to access the hypixel api. To get a key, go to https://developer.hypixel.net/ and follow the instructions.
-#path = fr'c:\Users\{user}\.lunarclient\offline\multiver\logs\latest.log' #If this isn't where your chat logs file is (and if you are using a client other than Lunar), please replace this with the correct path
+#If this isn't where your chat logs file is (and if you are using a client other than Lunar), please replace this with the correct path
 user_profile = os.getenv('USERPROFILE')
 path = fr'{user_profile}\.lunarclient\offline\multiver\logs\latest.log'
 
