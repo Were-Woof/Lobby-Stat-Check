@@ -19,7 +19,8 @@ def check_stats(player):
         uuid = res['id']
     except KeyError:
         return False
-
+        
+    #Getting data from hypixel
     headers = {"API-Key": API_KEY}
     guild_data = requests.get(
         f'https://api.hypixel.net/guild?player={uuid}',
@@ -28,7 +29,8 @@ def check_stats(player):
     data = requests.get(
         f"https://api.hypixel.net/player?uuid={uuid}",
         headers=headers).json()
-
+    
+    #Getting the players general stats
     try:
         stats_data: dict = data.get('player').get('stats', {})
     except (KeyError, ValueError):
@@ -37,6 +39,7 @@ def check_stats(player):
     bedwars_data = stats_data.get('Bedwars', {})
     duels_data = stats_data.get('Duels', {})
 
+    #Working out their bedwars stats
     try:
         bedwars_star = data["player"]["achievements"]["bedwars_level"]
     except KeyError:
@@ -48,11 +51,13 @@ def check_stats(player):
 
     guild_data = guild_data['guild']
 
+    #Calculating index
     index = bedwars_star * (bw_fkdr**2)
 
     if guild_data != None:
         return False
-    
+
+    #Checking if their index meets requirements
     if index >= 2000:
         return True
     return False
@@ -61,6 +66,7 @@ def check_stats(player):
 def find_players():
     print('Starting..\n')
 
+    #Opening the logs file
     with open(path, 'r+b') as file:
         for line_bytes in file.readlines():
             line = str(line_bytes).split('[CHAT] ')[-1]  # Only message content
