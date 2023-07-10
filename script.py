@@ -10,6 +10,8 @@ API_KEY = ''
 # Here we attempt to work out where your chat logs file is.
 # If this doesn't work, you will need to replace the path variable
 # with the correct value. Make sure to keep the 'fr' before the string.
+
+#For badlion the Chat logs can be found under `.minecraft/logs/blclient/minecraft/latest.log` (untested)
 user_profile = os.getenv('USERPROFILE')
 path = fr'{user_profile}\.lunarclient\offline\multiver\logs\latest.log' 
 
