@@ -1,6 +1,7 @@
 import os
 import re
 import requests
+import threading
 
 
 # This allows you to access the hypixel api.
@@ -20,6 +21,7 @@ def check_stats(player):
     try:
         uuid = res['id']
     except KeyError:
+        print(f'{player} does not meet requirements.')
         return False
         
     #Getting data from hypixel
@@ -36,6 +38,7 @@ def check_stats(player):
     try:
         stats_data: dict = data.get('player').get('stats', {})
     except (KeyError, ValueError):
+        print(f'{player} does not meet requirements.')
         return False
 
     bedwars_data = stats_data.get('Bedwars', {})
@@ -48,6 +51,7 @@ def check_stats(player):
         bedwars_star = 0
     
     if bedwars_star < 50:
+        print(f'{player} does not meet requirements.')
         return False
 
     bw_final_kills = bedwars_data.get('final_kills_bedwars', 0)
@@ -60,11 +64,14 @@ def check_stats(player):
     index = bedwars_star * (bw_fkdr**2)
 
     if guild_data != None:
+        print(f'{player} does not meet requirements.')
         return False
 
     #Checking if their index meets requirements
     if index >= 2000:
+        print(f'{player} meets requirements!    TRUE')
         return True
+    print(f'{player} does not meet requirements.')
     return False
 
 
@@ -85,12 +92,8 @@ def find_players():
             # Split name at end of rank and get last element (works for every rank including non)
             player = player.split('] ')[-1]
 
-            if check_stats(player):
-                print(f'{player} meets requirements. TRUE')
-            else:
-                        print(f'{player} does not meet requirements. FALSE')
+            threading.Thread(target=check_stats, args=(player,)).start()
 
-        print('\nFinished!')
 
 try:
     find_players()
