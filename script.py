@@ -64,6 +64,9 @@ def check_stats(player):
     index = bedwars_star * (bw_fkdr**2)
 
     if guild_data != None:
+        
+        exp = guild_data['exp']
+        
         EXP_NEEDED = [
         100000,
         150000,
