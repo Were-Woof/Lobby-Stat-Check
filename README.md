@@ -5,6 +5,6 @@ To use this script properly you must be able to run python on your device.
 
 # How to use
 
-- Make sure you have filled in the 'user' and 'API_KEY' variables and ensure the 'path' is correct.
+- Make sure you have filled in the 'API_KEY' variable and ensure the 'path' is correct.
 - Type '/list' while in a hypixel lobby
 - Run the script, all players who meet requirements and are not already in a hypixel guild will have their ign's printed to the terminal. The script should only take a few seconds to run.
