@@ -64,8 +64,36 @@ def check_stats(player):
     index = bedwars_star * (bw_fkdr**2)
 
     if guild_data != None:
-        print(f'{player} does not meet requirements.')
-        return False
+        EXP_NEEDED = [
+		100000,
+		150000,
+		250000,
+		500000,
+		750000,
+		1000000,
+		1250000,
+		1500000,
+		2000000,
+		2500000,
+		2500000,
+		2500000,
+		2500000,
+		2500000,
+		3000000]
+		
+		level = 0
+	
+		for req in EXP_NEEDED:
+		
+			if exp >= req:
+				exp -= req
+				level += 1
+			
+		level += int(exp/EXP_NEEDED[-1])
+        
+        if level > 30:
+            print(f'{player} does not meet requirements.')
+            return False
 
     #Checking if their index meets requirements
     if index >= 2000:
