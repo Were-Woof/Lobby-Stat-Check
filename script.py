@@ -65,31 +65,31 @@ def check_stats(player):
 
     if guild_data != None:
         EXP_NEEDED = [
-		100000,
-		150000,
-		250000,
-		500000,
-		750000,
-		1000000,
-		1250000,
-		1500000,
-		2000000,
-		2500000,
-		2500000,
-		2500000,
-		2500000,
-		2500000,
-		3000000]
-		
-		level = 0
-	
-		for req in EXP_NEEDED:
-		
-			if exp >= req:
-				exp -= req
-				level += 1
-			
-		level += int(exp/EXP_NEEDED[-1])
+        100000,
+        150000,
+        250000,
+        500000,
+        750000,
+        1000000,
+        1250000,
+        1500000,
+        2000000,
+        2500000,
+        2500000,
+        2500000,
+        2500000,
+        2500000,
+        3000000]
+        
+        level = 0
+        
+        for req in EXP_NEEDED:
+            
+            if exp >= req:
+                exp -= req
+                level += 1
+                
+        level += int(exp/EXP_NEEDED[-1])
         
         if level > 30:
             print(f'{player} does not meet requirements.')
