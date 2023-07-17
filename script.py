@@ -50,7 +50,7 @@ def check_stats(player):
     except KeyError:
         bedwars_star = 0
     
-    if bedwars_star < 150:
+    if bedwars_star < 50:
         print(f'{player} does not meet requirements.')
         return False
 
