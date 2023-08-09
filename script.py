@@ -2,6 +2,10 @@ import os
 import re
 import requests
 import threading
+import colorama
+import time
+from colorama import Fore, Style
+colorama.init(autoreset=True)
 
 # Please note that any and all stat requirements and checks are designed for hypixel bedwars, the script will not check other gamemodes
 
@@ -27,9 +31,8 @@ PATH = fr'{User_Profile}\.lunarclient\offline\multiver\logs\latest.log'
 #Setting up important variables
 
 headers = {"API-Key": API_KEY}
-ok_colour = '\033[92m'
-return_colour = '\033[0m'
-error_colour = '\033[91m'
+ok_colour = Fore.LIGHTGREEN_EX
+error_colour = Fore.RED
 
 def calculate_guild_level(exp) -> int:
     """
@@ -68,38 +71,40 @@ def check_against_reqs(player) -> bool:
     """
     Uses the hypixel API to determine whether the player meets the set requirements, will print their ign if they do, otherwise it will print nothing.
     """
-
-    # Getting the player's uuid
-    mojang_response = requests.get(f'https://api.mojang.com/users/profiles/minecraft/{player}?').json()
-    try:
-        uuid = mojang_response['id']
-    except KeyError as e:
-        print(f'{error_colour}Unable to find uuid for player: {player}. Please ignore this error.{return_colour}')
-        return False
-    
-
     # Getting player data from hypixel and ensuring that the response contains the expected json
-    player_data = requests.get(f"https://api.hypixel.net/player?uuid={uuid}", headers=headers).json()
+    player_data = requests.get(f"https://api.hypixel.net/player?name={player}", headers=headers).json()
     if 'player' not in player_data:
-        print(f'{error_colour}Unable to find stats for player {player}, try waiting 5 minutes and checking that your api key has not expired{return_colour}')
-        return False
+        try:
+            mojang_response = requests.get(f'https://api.mojang.com/users/profiles/minecraft/{player}').json()
+            uuid = mojang_response['id']
+            player_data = requests.get(f"https://api.hypixel.net/player?uuid={uuid}", headers=headers).json()
+            if 'player' not in player_data:
+                print(f'{error_colour}Unable to find stats for player {player}, try waiting 5 minutes and checking that your api key has not expired')
+                return False
+        except:
+            print(f'{error_colour}Unable to find stats for player {player}, try waiting 5 minutes and checking that your api key has not expired')
+            return False
+    else:
+        try:
+            uuid = player_data['player']['uuid']
+        except:
+            return False
     
 
     # Finding the player's bedwars stats | Checking if the player's star is below the set requirement
     try:
-        #for i in player_data['stats']:
-         #   print(i)
         bedwars_data = player_data['player']['stats']['Bedwars']
     except:
-        print(f'{error_colour}Ran into an error while finding bedwars stats for player {player}, if this issue persists please contact the script\'s developer with the code: "Step 2"{return_colour}')
+        print(f'{error_colour}Ran into an error while finding bedwars stats for player {player}, if this issue persists please contact the script\'s developer with the code: "Step 2"')
         return False
     
     try:
         bedwars_star = player_data["player"]["achievements"]["bedwars_level"]
         if bedwars_star < Star_Req:
+            print(f'{Fore.LIGHTYELLOW_EX}{player} does not meet requirements')
             return False        
     except:
-        print(f'{error_colour}Ran into an issue while finding bedwars star for player {player}, if this issue persists please contact the script\'s developer with the code: "Step 3"{return_colour}')
+        print(f'{error_colour}Ran into an issue while finding bedwars star for player {player}, if this issue persists please contact the script\'s developer with the code: "Step 3"')
         return False
 
     bw_final_kills = bedwars_data.get('final_kills_bedwars', 0)
@@ -108,30 +113,33 @@ def check_against_reqs(player) -> bool:
 
     # Checking if the player's index and fkdr meet requirements
     if bw_fkdr < FKDR_Req:
+        print(f'{Fore.LIGHTYELLOW_EX}{player} does not meet requirements\n')
         return False
     
     index = bedwars_star * (bw_fkdr**2)
 
     if index < Index_Req:
+        print(f'{Fore.LIGHTYELLOW_EX}{player} does not meet requirements')
         return False
     
 
     # Finding the player's guild stats (if they are in one) | returning True if the player is not in a guild
     guild_data = requests.get(f'https://api.hypixel.net/guild?player={uuid}', headers=headers).json()
     if 'guild' not in guild_data:
-        print(f'{ok_colour}{player} meets requirements{return_colour}')
+        print(f'{ok_colour}{player} meets requirements')
         return True
     
     if guild_data['guild'] == None:
-        print(f'{ok_colour}{player} meets requirements{return_colour}')
+        print(f'{ok_colour}{player} meets requirements')
         return True
     
     guild_level = calculate_guild_level(guild_data['guild']['exp'])
 
     if guild_level > Max_Guild_Level:
+        f'{Fore.LIGHTYELLOW_EX}{player} does not meet requirements\n'
         return False
     
-    print(f'{ok_colour}{player} meets requirements{return_colour}')
+    print(f'{ok_colour}{player} meets requirements\n')
     return True
 
 
@@ -161,10 +169,7 @@ def get_player_list() -> list:
             if "'" in player[1]:
                 players[player[0]] = player[1].removesuffix("'")
 
-            #threading.Thread(target=check_against_reqs, args=(player,)).start() # Creating a thread for each player that is being checked
-        #print(players)
         return players
-        #print('Successfully started checking each player in your lobby! If nothing further gets printed, that just means that no players met requirements')
 
 
 def start() -> None:
@@ -172,18 +177,12 @@ def start() -> None:
     Uses the functions defined above to check which players shown in the last '/list' command meet the configured requirements. Threading is used to speed up the process
     """
 
-    print('Starting..\n')
+    print(f'{Fore.YELLOW}Starting..\n')
 
     players = get_player_list()
-
     for player in players:
+        time.sleep(0.1)
         threading.Thread(target=check_against_reqs, args=(player,)).start()
 
-    print('Successfully started checking each player in your lobby! If nothing further gets printed, that just means that no players met requirements.')
 
-
-
-try:
-    start()
-except KeyboardInterrupt:
-    exit(0)
+start()
