@@ -11,6 +11,7 @@ colorama.init(autoreset=True)
 
 # API_KEY =  The key that allows you to access the hypixel api, go to https://developer.hypixel.net/ and follow the instructions
 # Index_Req =  The index required to meet requirements, index is calculated by: stars*(fkdr**2)
+# Max_Index =  The maximum index that a player may have in order to meet requirements
 # Star_Req =  The bedwars stars required to meet requirements
 # FKDR_Req =  The FKDR (Final Kills to Deaths Ratio) required to meet requirements
 # Max_Guild_Level =  The maximum guild level that players may be in order to meet requirements
@@ -18,7 +19,8 @@ colorama.init(autoreset=True)
 # PATH =  The path to your minecraft chat logs, by default this is set for Lunar Client, if you are not using lunar you will have to change this setting
 
 API_KEY = ''
-Index_Req = 2000
+Index_Req = 200
+Max_Index = 0
 Star_Req = 50
 FKDR_Req = 0
 Max_Guild_Level = 30
@@ -118,7 +120,7 @@ def check_against_reqs(player) -> bool:
     
     index = bedwars_star * (bw_fkdr**2)
 
-    if index < Index_Req:
+    if Max_Index < index < Index_Req:
         print(f'{Fore.LIGHTYELLOW_EX}{player} does not meet requirements')
         return False
     
