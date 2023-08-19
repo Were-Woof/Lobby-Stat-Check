@@ -120,7 +120,7 @@ def check_against_reqs(player) -> bool:
     
     index = bedwars_star * (bw_fkdr**2)
 
-    if Max_Index < index < Index_Req:
+    if (Max_Index < index) or (index < Index_Req):
         print(f'{Fore.LIGHTYELLOW_EX}{player} does not meet requirements')
         return False
     
