@@ -19,8 +19,8 @@ colorama.init(autoreset=True)
 # PATH =  The path to your minecraft chat logs, by default this is set for Lunar Client, if you are not using lunar you will have to change this setting
 
 API_KEY = ''
-Index_Req = 200
-Max_Index = 0
+Index_Req = 2000
+Max_Index = 10000
 Star_Req = 50
 FKDR_Req = 0
 Max_Guild_Level = 30
